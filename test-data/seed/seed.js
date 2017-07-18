@@ -64,6 +64,35 @@ function createExpensesData() {
     });
 }
 
+function createBillingData() {
+    let data = {};
+    const milli = 7776;
+    const top = 1498680060000;
+    for (let k = 0; k < 25; k++) {
+        const created = fakeRandomDate();
+        const billDate = fakeRandomDate();
+        const rate = Math.floor(Math.random() * 50000) / 100;
+        const timeWorked = Math.floor(Math.random() * 50) / 10;
+        const amount = Math.floor(Math.random() * 10000) / 100;
+        const currency = 'GBP';
+        const description = faker.lorem.sentence();
+        const client = faker.company.companyName();
+        const note = faker.lorem.sentence();
+        const invoiced = Math.random() > 0.5 ? true : false;
+        const randPeriod1 = Math.floor(Math.random() * milli * 1000000);
+        const dueDate = created + randPeriod1;
+        const received = Math.random() > 0.5 ? true : false;
+        const overdue = Math.random() > 0.5 ? true : false;
+        const lastEditTime = Math.random() > 0.7 ? Math.max(top, created + randPeriod1) : created;
+        data['bill' + k.toString()] = {created, billDate, rate, timeWorked, amount, currency, 
+                                        description, client, note, invoiced, dueDate, received, overdue, lastEditTime};
+    }
+    const fileData = JSON.stringify(data, null, '\t');
+    fs.writeFile('billing.json', fileData, function (err) {
+        console.log(err);
+    });
+}
+
 function fakeRandomDate() {
     const rand1 = randBetween(0,5);
     const rand2 = randBetween(1,28);
@@ -77,4 +106,4 @@ function randBetween(a, b) {
     return Math.floor(Math.random() * (b - a) + a);
 }
 
-createExpensesData();
+createBillingData();
