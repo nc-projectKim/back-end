@@ -1,5 +1,6 @@
 const firebase = require('firebase');
 const config = require('../config');
+const _ = require('underscore')
 
 firebase.initializeApp(config);
 
@@ -7,13 +8,20 @@ const database = firebase.database();
 
 firebase.auth().signInWithEmailAndPassword('John.Smith@google1.com', 'password123')
     .then((data) => {
-        return database.ref(`/notes/${data.uid}`)
+        return database.ref(`/notes/${data.uid}/`)
     })
     .then((noteRef) => {
-        noteRef.limitToFirst(10).once('value')
-            .then(function (snap) {
-                console.log('snap.val()', snap.val());
-            });
+       return noteRef.once('value')
+    })
+    .then(function (data) {
+       return _.sortBy(data.val(), "created"); 
+    })
+    .then(function(data) {
+        return _.chain(data)
+        .map(function (ele) {
+            return ele.created
+        })
+        .each(console.log)
     });
 
 

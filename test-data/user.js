@@ -31,7 +31,7 @@ firebase.auth().createUserWithEmailAndPassword(email, password)
 // code previously used to seed users
 // const keys = Object.keys(users);
 
-// const promises = keys.slice(0,2).map(key => {
+// const promises = keys.map(key => {
 //     firebase.auth().createUserWithEmailAndPassword(`${key}@google.com`, password)
 // });
 
