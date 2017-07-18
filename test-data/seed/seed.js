@@ -41,6 +41,29 @@ function createNotesData() {
     });
 }
 
+function createExpensesData() {
+    let data = {};
+    const milli = 7776;
+    const top = 1498680060000;
+    for (let k = 0; k < 25; k++) {
+        const created = fakeRandomDate();
+        const expenseDate = fakeRandomDate();
+        const amount = Math.floor(Math.random() * 10000) / 100;
+        const currency = 'GBP';
+        const description = faker.lorem.sentence();
+        const haveReceipt = Math.random() > 0.5 ? true : false;
+        const chargeTo = faker.company.companyName();
+        const randPeriod = Math.floor(Math.random() * milli * 1000000);
+        const lastEditTime = Math.random() > 0.7 ? Math.max(top, created + randPeriod) : created;
+        data['expense' + k.toString()] = {created, expenseDate, amount, currency, description, haveReceipt,
+                                            chargeTo, lastEditTime};
+    }
+    const fileData = JSON.stringify(data, null, '\t');
+    fs.writeFile('expenses.json', fileData, function (err) {
+        console.log(err);
+    });
+}
+
 function fakeRandomDate() {
     const rand1 = randBetween(0,5);
     const rand2 = randBetween(1,28);
@@ -54,4 +77,4 @@ function randBetween(a, b) {
     return Math.floor(Math.random() * (b - a) + a);
 }
 
-createNotesData();
+createExpensesData();
