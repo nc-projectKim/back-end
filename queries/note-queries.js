@@ -19,7 +19,7 @@ firebase.auth().signInWithEmailAndPassword('John.Smith@google1.com', 'password12
     .then(function(data) {
         return _.chain(data)
         .map(function (ele) {
-            return ele.created
+            return ele
         })
         .each(console.log)
     });
