@@ -20,14 +20,14 @@ firebase.auth().signInWithEmailAndPassword(email, password)
     })
     .then(function (data) {
         return _.chain(data.val())
-       .filter(filterByExpenseDate)
-       .sortBy('expenseDate')
+       .filter(filterBylastEditTime)
+       .sortBy('lastEditTime')
 
     })
     .then(function(data) {
         console.log(data);
     });
 
-function filterByExpenseDate(expense) {
-    return expense.expenseDate >= startDate && expense.expenseDate <= endDate;
+function filterBylastEditTime(expense) {
+    return expense.lastEditTime >= startDate && expense.lastEditTime <= endDate;
 }
