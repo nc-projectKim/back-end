@@ -23,6 +23,7 @@ firebase.auth().signInWithEmailAndPassword(email, password)
         const dataObj = {};
         data.forEach(function(childData) {
             if (childData.val().haveReceipt === ticked) {
+                console.log(childData.key)
                 dataObj[childData.key] = childData.val();
             }
         });

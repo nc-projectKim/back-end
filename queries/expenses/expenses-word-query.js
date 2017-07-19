@@ -20,7 +20,12 @@ firebase.auth().signInWithEmailAndPassword(email, password)
        return noteRef.once('value');
     })
     .then(function (data) {
-       return _.filter(data.val(), filterByWord); 
+        const dataObj = {}
+       _.filter(data.val(), filterByWord)
+       .forEach(ele => {
+           dataObj[ele.key] = ele;
+       }) 
+        return dataObj;
     })
     .then(function(data) {
         console.log(data);
