@@ -1,12 +1,8 @@
 const firebase = require('firebase');
-const config = require('../config');
-
-firebase.initializeApp(config);
-
-const database = firebase.database();
+const database = require('../config');
 
 const newBilling = {
-    amount: 3700.73,
+    amount: 1000.75,
     lastEditTime: Date.now()
 }
 
@@ -15,6 +11,6 @@ firebase.auth().signInWithEmailAndPassword('John.Smith@google1.com', 'password12
         return data.uid;
     })
     .then(function (id) {
-        const billingRef = database.ref(`/billings/${id}/-KpLWSpXHxJX9SPanj41`)
+        const billingRef = database.ref(`/billings/${id}/-KpLWSpFErcxHcmoSfio`)
         return billingRef.update(newBilling);
     });

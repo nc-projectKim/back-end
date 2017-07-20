@@ -1,15 +1,10 @@
 const firebase = require('firebase');
-const config = require('../config');
-
-firebase.initializeApp(config);
-
-const database = firebase.database();
+const database = require('../config');
 
 const users = require('./seed/users.json')
 
 const password = 'password123'
 const email = 'John.Smith@google1.com'
-
 
 firebase.auth().createUserWithEmailAndPassword(email, password)
     .then(function (data) {
