@@ -1,23 +1,22 @@
 const firebase = require('firebase');
 const config = require('../config');
-const _ = require('underscore')
 
 firebase.initializeApp(config);
 
 const database = firebase.database();
 
-const queryItems = {
-    invoiced: true,
-    overdue: null,
-    client: null,
-};
-
-const findWord = /dolore/i;
-
-const dateItems = {
-    dateChosen: 'billDate',
-    from: 1484335371000,
-    to: 1488197395000
+const query = {
+    dateItems: {
+        dateChosen: 'billDate',
+        from: 1484335371000,
+        to: 1488197395000
+    },
+    findWord: 'dolore',
+    queryItems:{
+        invoiced: true,
+        overdue: null,
+        client: null
+    }
 };
 
 firebase.auth().signInWithEmailAndPassword('John.Smith@google1.com', 'password123')
@@ -31,19 +30,21 @@ firebase.auth().signInWithEmailAndPassword('John.Smith@google1.com', 'password12
         const dataObj = {};
         data.forEach(function(childData) {
             const childObject = childData.val();
-            const testDate = childObject[dateItems.dateChosen] >= dateItems.from
-                            && childObject[dateItems.dateChosen] <= dateItems.to;
+            const testDate = childObject[query.dateItems.dateChosen] >= query.dateItems.from
+                            && childObject[query.dateItems.dateChosen] <= query.dateItems.to;
             let include = true;
-            for (let key of Object.keys(queryItems)) {
-                if (queryItems[key] !== null && childObject[key] !== queryItems[key]) {
+            for (let key of Object.keys(query.queryItems)) {
+                if (query.queryItems[key] !== null && childObject[key] !== query.queryItems[key]) {
                     include = false;
                 }
             }
-            const testWord = findWord.test(childObject.description) || 
-                    findWord.test(childObject) ||
-                    findWord.test(childObject);
-            if (!testWord) include = false;
-            console.log(childObject.description, childObject.client, childObject.note, testWord);
+            if (query.findWord !== null) {
+                const regex = new RegExp(query.findWord, 'i');
+                const testWord = regex.test(childObject.description) || 
+                        regex.test(childObject) ||
+                        regex.test(childObject);
+                if (!testWord) include = false;
+            }
             if (include && testDate) {
                 dataObj[childData.key] = childData.val();
             }
