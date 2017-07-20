@@ -6,7 +6,7 @@ firebase.initializeApp(config);
 const database = firebase.database();
 
 const newNote = {
-    text: 'new text',
+    tags: ['sticky'],
     lastEditTime: Date.now()
 }
 
@@ -15,6 +15,6 @@ firebase.auth().signInWithEmailAndPassword('John.Smith@google1.com', 'password12
         return data.uid;
     })
     .then(function (id) {
-        const noteRef = database.ref(`/notes/${id}/-KpK3h4WSXDFWnY7uFR1`)
+        const noteRef = database.ref(`/notes/${id}/-KpK3h4bwr6VoaRh8aex`)
         return noteRef.update(newNote);
     })

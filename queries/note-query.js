@@ -7,24 +7,20 @@ const database = firebase.database();
 
 const query = {
     dateItems: {
-        dateChosen: 'billDate',
+        dateChosen: 'lastEditTime',
         from: 1484335371000,
-        to: 1488197395000
+        to: 1501197395000
     },
-    findWord: 'dolore',
-    queryItems:{
-        invoiced: true,
-        overdue: null,
-        client: null
-    }
+    findWord: 'labore',
+    queryTags: ['Sticky']
 };
 
 firebase.auth().signInWithEmailAndPassword('John.Smith@google1.com', 'password123')
     .then((data) => {
-        return database.ref(`/billings/${data.uid}/`)
+        return database.ref(`/notes/${data.uid}/`)
     })
-    .then((billingRef) => {
-       return billingRef.once('value');
+    .then((noteRef) => {
+       return noteRef.once('value');
     })
     .then(function (data) {
         const dataObj = {};
@@ -33,16 +29,11 @@ firebase.auth().signInWithEmailAndPassword('John.Smith@google1.com', 'password12
             const testDate = childObject[query.dateItems.dateChosen] >= query.dateItems.from
                             && childObject[query.dateItems.dateChosen] <= query.dateItems.to;
             let include = true;
-            for (let key of Object.keys(query.queryItems)) {
-                if (query.queryItems[key] !== null && childObject[key] !== query.queryItems[key]) {
-                    include = false;
-                }
-            }
+            if (!filterByTag(childObject)) include = false;
             if (query.findWord !== null) {
                 const regex = new RegExp(query.findWord, 'i');
-                const testWord = regex.test(childObject.description) || 
-                        regex.test(childObject.note) ||
-                        regex.test(childObject.client);
+                const testWord = regex.test(childObject.text) || 
+                        regex.test(childObject.title);
                 if (!testWord) include = false;
             }
             if (include && testDate) {
@@ -54,3 +45,24 @@ firebase.auth().signInWithEmailAndPassword('John.Smith@google1.com', 'password12
     .then(function(obj) {
         console.log(obj);
     });
+
+function filterByTag(note) {
+    const regexes = query.queryTags.map((ele) => {
+        return new RegExp(ele, 'i')
+    });
+    if (note.tags) {
+        var containsAll = true;
+        for (var i = 0; i < regexes.length; i++) {
+            const filtered = note.tags.filter((ele) => {
+                return regexes[i].test(ele);
+            }).length;
+
+            if (filtered === 0) {
+                containsAll = false;
+                break;
+            }
+        }
+        return containsAll;
+    }
+    else return false;
+}
