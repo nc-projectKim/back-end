@@ -12,7 +12,7 @@ const queryItems = {
     client: null,
 };
 
-const findWord = 'ut';
+const findWord = /dolore/i;
 
 const dateItems = {
     dateChosen: 'billDate',
@@ -35,15 +35,15 @@ firebase.auth().signInWithEmailAndPassword('John.Smith@google1.com', 'password12
                             && childObject[dateItems.dateChosen] <= dateItems.to;
             let include = true;
             for (let key of Object.keys(queryItems)) {
-                const test = childObject.description.indexOf(findWord) !== -1 || 
-                        childObject.note.indexOf(findWord) !== -1 ||
-                        childObject.client.indexOf(findWord) !== -1;
                 if (queryItems[key] !== null && childObject[key] !== queryItems[key]) {
                     include = false;
                 }
-                if (test) include = false;
-                console.log(key, queryItems[key], childObject[key], include);
             }
+            const testWord = findWord.test(childObject.description) || 
+                    findWord.test(childObject) ||
+                    findWord.test(childObject);
+            if (!testWord) include = false;
+            console.log(childObject.description, childObject.client, childObject.note, testWord);
             if (include && testDate) {
                 dataObj[childData.key] = childData.val();
             }
