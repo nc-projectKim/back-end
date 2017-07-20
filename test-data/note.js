@@ -1,11 +1,8 @@
 const firebase = require('firebase');
-const config = require('../config');
+const database = require('../config');
+
 const notes = require('./seed/notes.json')
 const keys = Object.keys(notes);
-
-firebase.initializeApp(config);
-
-const database = firebase.database();
 
 // const note = {
 //     created: Date.now(),
@@ -15,7 +12,6 @@ const database = firebase.database();
 //     lastEditTime: Date.now()
 // };
 
-// Sign in existing user
 firebase.auth().signInWithEmailAndPassword('John.Smith@google1.com', 'password123')
     .then((data) => {
         return data.uid;

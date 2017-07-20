@@ -1,9 +1,7 @@
 const firebase = require('firebase');
-const config = require('../config');
+const database = require('../config');
 
-firebase.initializeApp(config);
 
-const database = firebase.database();
 
 firebase.auth().signInWithEmailAndPassword('John.Smith@google1.com', 'password123')
     .then((data) => {

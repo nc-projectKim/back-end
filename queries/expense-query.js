@@ -1,5 +1,5 @@
 const firebase = require('firebase');
-const config = require('../config');
+const database = require('../config');
 
 // variables required for testing the query
 const email = 'John.Smith@google1.com';
@@ -17,10 +17,6 @@ const query = {
         chargeTo: null
     }
 };
-
-firebase.initializeApp(config);
-
-const database = firebase.database();
 
 firebase.auth().signInWithEmailAndPassword(email, password)
     .then((data) => {

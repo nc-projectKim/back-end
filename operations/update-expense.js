@@ -1,9 +1,5 @@
 const firebase = require('firebase');
-const config = require('../config');
-
-firebase.initializeApp(config);
-
-const database = firebase.database();
+const database = require('../config');
 
 const email = 'John.Smith@google1.com';
 const password = 'password123';
