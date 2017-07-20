@@ -11,7 +11,7 @@ const expenseId = '-KpLPSBPY83Xe-i9mopJ'
 
 const newExpense = {
     amount: 203.00,
-    lastEditTime: Date.w()
+    lastEditTime: Date.now()
 }
 
 function updateExpense(expenseId) {
