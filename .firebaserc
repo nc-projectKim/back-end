@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "project-kim-6b8cc"
+    "default": "project-kim-6b8cc",
+    "kim-dev": "project-kim-6b8cc"
   }
 }
