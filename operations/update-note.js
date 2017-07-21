@@ -15,7 +15,7 @@ const newNote = {
 //         return noteRef.update(newNote);
 //     })
 
-export default updateNote(noteId) {
+export default function updateNote(noteId) {
     const updatedNote = {
         text: 'Doomed1',
         lastEditTime: Date.now()

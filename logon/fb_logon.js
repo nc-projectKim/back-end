@@ -3,7 +3,7 @@ const database = require('../config');
 
 var provider = new firebase.auth.FacebookAuthProvider();
 
-export default logOnWithFacebook(e) {
+export default function logOnWithFacebook(e) {
   e.preventDefault();
   firebase.auth().signInWithPopup(provider)
     .then(function (data) {
