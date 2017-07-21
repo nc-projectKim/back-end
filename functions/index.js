@@ -28,15 +28,34 @@ admin.initializeApp(functions.config().firebase);
 // });
 
 exports.validateNote = functions.database.ref('/notes/{userId}/{noteId}')
-    .onCreate(event => {
-        const original = event.data.val()
-        console.log(event.data.val());
-        if (!original.created || isNaN(original.created)) original.created = Date.now();
-        if (typeof original.text !== 'string') original.text = original.text.toString();
-        if (!original.title) {
-          const noteDate = new Date(original.created).toUTCString()
-          original.title = `Note created on ${noteDate}`;
-        }
-        if (!original.lastEditTime || isNaN(original.lastEditTime)) original.lastEditTime = Date.now();
-        return event.data.ref.set(original);
-    });
+  .onWrite(event => {
+    const original = event.data.val()
+    console.log(event.data.val());
+    if (!original.created || isNaN(original.created)) original.created = Date.now();
+    if (typeof original.text !== 'string') original.text = original.text.toString();
+    if (!original.title) {
+      const noteDate = new Date(original.created).toUTCString()
+      original.title = `Note created on ${noteDate}`;
+    }
+    if (!original.lastEditTime || isNaN(original.lastEditTime)) original.lastEditTime = Date.now();
+    return event.data.ref.set(original);
+  });
+
+exports.validateExpense = functions.database.ref('/expenses/{userId}/{noteId}')
+  .onWrite(event => {
+    const original = event.data.val()
+    console.log(event.data.val());
+    if (!original.created || isNaN(original.created)) original.created = Date.now();
+    if (!original.expenseDate || isNaN(original.expenseDate)) original.expenseDate = Date.now();
+    if (!original.currency) original.currency = 'GBP';
+    if (typeof original.currency !== 'string') original.currency = original.currency.toString();
+    if (!original.description) {
+      const expenseDate = new Date(original.created).toUTCString()
+      original.description = `Expense created on ${expenseDate}`;
+    }
+    if (typeof original.description !== 'string') original.description = original.description.toString();
+    if (typeof original.haveReceipt !== 'boolean') original.haveReceipt = false;
+    if (typeof original.chargeTo !== 'string') original.chargeTo = original.chargeTo.toString();
+    if (!original.lastEditTime || isNaN(original.lastEditTime)) original.lastEditTime = Date.now();
+    return event.data.ref.set(original);
+  });
