@@ -2,7 +2,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 
 // const gmailEmail = encodeURIComponent(functions.config().gmail.email);
 // const gmailPassword = encodeURIComponent(functions.config().gmail.password);
@@ -27,3 +27,16 @@ const nodemailer = require('nodemailer');
 //     });
 // });
 
+exports.validateNote = functions.database.ref('/notes/{userId}/{noteId}')
+    .onCreate(event => {
+        const original = event.data.val()
+        console.log(event.data.val());
+        if (!original.created || isNaN(original.created)) original.created = Date.now();
+        if (typeof original.text !== 'string') original.text = original.text.toString();
+        if (!original.title) {
+          const noteDate = new Date(original.created).toUTCString()
+          original.title = `Note created on ${noteDate}`;
+        }
+        if (!original.lastEditTime || isNaN(original.lastEditTime)) original.lastEditTime = Date.now();
+        return event.data.ref.set(original);
+    });
