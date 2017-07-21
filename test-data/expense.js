@@ -2,12 +2,10 @@ const firebase = require('firebase');
 const database = require('../config');
 
 const expense = {
-    created: Date.now(),
+    created: 'banana',
     expenseDate: Date.now(),
     amount: 200.19,
-    currency: 'GBP',
-    description: 'parking for 25s econds outside arndale',
-    haveReceipt: true,
+    haveReceipt: 'banana',
     chargeTo: 'Northcoders',
     lastEditTime: Date.now()
 };
