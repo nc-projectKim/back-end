@@ -24,7 +24,7 @@ exports.updatedNoteValidation = functions.https.onRequest((req, res) => {
     const original = req.body;
     const noteId = original.noteId
     const notesRef = admin.database().ref(`/notes/${original.userId}/${noteId}`);
-    if (original.title) notesRef.update({"title" : original.title})
+    if (original.title) notesRef.update({ "title": original.title })
     if (original.text) {
       if (typeof original.text !== 'string') original.text = original.text.toString();
       notesRef.update({ "text": original.text })
@@ -67,6 +67,31 @@ exports.newExpenseValidation = functions.https.onRequest((req, res) => {
     if (!original.lastEditTime || isNaN(original.lastEditTime)) original.lastEditTime = Date.now();
     const expensesRef = admin.database().ref(`/expenses/${original.userId}`);
     expensesRef.push(original);
+    res.status(200).send(original)
+  });
+});
+
+exports.updatedExpenseValidation = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
+    const original = req.body;
+    const expenseId = original.expenseId
+    const expensesRef = admin.database().ref(`/expenses/${original.userId}/${expenseId}`);
+    if (original.expenseDate && !isNaN(original.expenseDate)) expensesRef.update({ "expenseDate": original.expenseDate });
+    if (original.currency) {
+      if (typeof original.currency !== 'string') original.currency = original.currency.toString();
+      expensesRef.update({ "currency": original.currency });
+    }
+    if (original.description) expensesRef.update({ "description": original.description });
+    if (original.description) {
+      if (typeof original.description !== 'string') original.description = original.description.toString();
+      expensesRef.update({ "description": original.description });
+    }
+    if (original.haveReceipt) expensesRef.update(original.haveReceipt);
+    if (original.chargeTo) {
+      if (typeof original.chargeTo !== 'string') original.chargeTo = original.chargeTo.toString();
+      expensesRef.update({ "chargeTo": original.chargeTo });
+    }
+    expensesRef.update({ "lastEditTime": Date.now() })
     res.status(200).send(original)
   });
 });
