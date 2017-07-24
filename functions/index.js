@@ -4,36 +4,57 @@ admin.initializeApp(functions.config().firebase);
 const cors = require('cors')({ origin: true });
 
 exports.newNoteValidation = functions.https.onRequest((req, res) => {
-  cors(req, res, () => {
-    const original = req.body;
-    if (!original.created || isNaN(original.created)) original.created = Date.now();
-    if (typeof original.text !== 'string') original.text = original.text.toString();
-    if (!original.title) {
-      const noteDate = new Date(original.created).toUTCString()
-      original.title = `Note created on ${noteDate}`;
-    }
-    if (!original.lastEditTime || isNaN(original.lastEditTime)) original.lastEditTime = Date.now();
-    const notesRef = admin.database().ref(`/notes/${original.userId}`);
-    notesRef.push(original);
-    res.status(200).send(original)
-  });
+  
+  const original = req.body;
+  if (!original.created || isNaN(original.created)) original.created = Date.now();
+  if (typeof original.text !== 'string') original.text = original.text.toString();
+  if (!original.title) {
+    const noteDate = new Date(original.created).toUTCString()
+    original.title = `Note created on ${noteDate}`;
+  }
+  if (!original.lastEditTime || isNaN(original.lastEditTime)) original.lastEditTime = Date.now();
+  const notesRef = admin.database().ref(`/notes/${original.userId}`);
+  notesRef.push(original);
+  getCors(res);
+  res.status(200).send(original)
+
 });
 
 exports.updatedNoteValidation = functions.https.onRequest((req, res) => {
-  cors(req, res, () => {
-    const original = req.body;
-    const noteId = original.noteId
-    const notesRef = admin.database().ref(`/notes/${original.userId}/${noteId}`);
-    if (original.title) notesRef.update({ "title": original.title })
-    if (original.text) {
-      if (typeof original.text !== 'string') original.text = original.text.toString();
-      notesRef.update({ "text": original.text })
-    }
-    if (original.tags) notesRef.update({ "tags": original.tags })
-    notesRef.update({ "lastEditTime": Date.now() })
-    res.status(200).send(original)
-  });
+  const original = req.body;
+  const noteId = original.noteId
+  const notesRef = admin.database().ref(`/notes/${original.userId}/${noteId}`);
+  if (typeof original.text !== 'string') original.text = original.text.toString();
+  original.lastEditTime = Date.now();
+  // if (original.title) notesRef.update({ "title": original.title })
+  // if (original.text) {
+  //   if (typeof original.text !== 'string') original.text = original.text.toString();
+  //   notesRef.update({ "text": original.text })
+  // }
+  // if (original.tags) notesRef.update({ "tags": original.tags })
+  notesRef.update(original);
+  getCors(res);
+  res.status(200).send(original)
+
 });
+
+// exports.updatedNoteValidation = functions.https.onRequest((req, res) => {
+//   cors(req, res, () => {
+//     const original = req.body;
+//     const noteId = original.noteId
+//     const notesRef = admin.database().ref(`/notes/${original.userId}/${noteId}`);
+//     if (typeof original.text !== 'string') original.text = original.text.toString();
+//     original.lastEditTime = Date.now();
+//     // if (original.title) notesRef.update({ "title": original.title })
+//     // if (original.text) {
+//     //   if (typeof original.text !== 'string') original.text = original.text.toString();
+//     //   notesRef.update({ "text": original.text })
+//     // }
+//     // if (original.tags) notesRef.update({ "tags": original.tags })
+//     notesRef.set(original)
+//     res.status(200).send(original)
+//   });
+// });
 
 //old version of note validation
 // exports.validateNote = functions.database.ref('/notes/{userId}/{noteId}')
@@ -171,3 +192,8 @@ exports.newBillingValidation = functions.https.onRequest((req, res) => {
 //     if (!original.lastEditTime || isNaN(original.lastEditTime)) original.lastEditTime = Date.now();
 //     return event.data.ref.set(original);
 //   });
+
+function getCors(res) {
+  res.set('Access-Control-Allow-Origin', "*")
+  res.set('Access-Control-Allow-Methods', 'PUT, POST');
+}
