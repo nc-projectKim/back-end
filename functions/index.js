@@ -3,31 +3,6 @@ const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 const cors = require('cors')({ origin: true });
 
-// const nodemailer = require('nodemailer');
-
-// const gmailEmail = encodeURIComponent(functions.config().gmail.email);
-// const gmailPassword = encodeURIComponent(functions.config().gmail.password);
-// const mailTransport = nodemailer.createTransport(
-//     `smtps://${gmailEmail}:${gmailPassword}@smtp.gmail.com`);
-
-// exports.sendEmailConfirmation = functions.database.ref('/users/{uid}').onWrite(event => {
-//   const snapshot = event.data;
-//   const val = snapshot.val();
-
-//   const mailOptions = {
-//     from: '"Kim" <noreply@firebase.com>',
-//     to: val.email
-//   };
-
-//     mailOptions.subject = 'Thanks and Welcome!';
-//     mailOptions.text = 'Thanks you for subscribing to our newsletter. You will receive our next weekly newsletter.';
-//     return mailTransport.sendMail(mailOptions).then(() => {
-//       console.log('New subscription confirmation email sent to:', val.email);
-//     }).catch(error => {
-//       console.error('There was an error while sending the email:', error);  
-//     });
-// });
-
 exports.newNoteValidation = functions.https.onRequest((req, res) => {
   cors(req, res, () => {
     const original = req.body;
@@ -44,19 +19,21 @@ exports.newNoteValidation = functions.https.onRequest((req, res) => {
   });
 });
 
-// exports.updatedNoteValidation = functions.https.onRequest((req, res) => {
-//   cors(req, res, () => {
-//     const original = req.body;
-//     const noteId = original.noteId
-//     const notesRef = admin.database().ref(`/notes/${original.userId}/${original.noteId}`);
-//     if (original.created) delete original.created;
-//     if (typeof original.text !== 'string') original.text = original.text.toString();
-//     original.lastEditTime = Date.now();
-
-//     notesRef.set(original);
-//     res.status(200).send(original)
-//   });
-// });
+exports.updatedNoteValidation = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
+    const original = req.body;
+    const noteId = original.noteId
+    const notesRef = admin.database().ref(`/notes/${original.userId}/${original.noteId}`);
+    if (original.title) notesRef.child('title').set(original.title)
+    if (original.text) {
+      if (typeof original.text !== 'string') original.text = original.text.toString();
+      notesRef.child('text').set(original.text)
+    }
+    if (original.tags) notesRef.child('tags').set(tags)
+    notesRef.child('lastEditTime').set(Date.now())
+    res.status(200).send(original)
+  });
+});
 
 // exports.validateNote = functions.database.ref('/notes/{userId}/{noteId}')
 //   .onWrite(event => {
