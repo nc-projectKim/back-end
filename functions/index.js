@@ -15,9 +15,7 @@ exports.newNoteValidation = functions.https.onRequest((req, res) => {
     dataObj.lastEditTime = Date.now();
     admin.database().ref(`/notes/${dataObj.userId}`)
       .push(dataObj)
-      .then(() => {
-        res.status(200).send('note created')
-      });
+    res.status(200).end('note created')
   });
 });
 
@@ -29,10 +27,7 @@ exports.updatedNoteValidation = functions.https.onRequest((req, res) => {
     if (typeof dataObj.text !== 'string') dataObj.text = dataObj.text.toString();
     dataObj.lastEditTime = Date.now();
     notesRef.update(dataObj)
-      .then(() => {
-        res.status(200).send('note updated')
-      })
-
+    res.status(200).send('note updated')
   });
 });
 
@@ -54,7 +49,7 @@ exports.updatedNoteValidation = functions.https.onRequest((req, res) => {
 exports.newExpenseValidation = functions.https.onRequest((req, res) => {
   cors(req, res, () => {
     const dataObj = req.body;
-    if (!dataObj.created || isNaN(dataObj.created)) dataObj.created = Date.now();
+    dataObj.created = Date.now();
     if (!dataObj.expenseDate || isNaN(dataObj.expenseDate)) dataObj.expenseDate = Date.now();
     if (!dataObj.currency) dataObj.currency = 'GBP';
     if (typeof dataObj.currency !== 'string') dataObj.currency = dataObj.currency.toString();
@@ -65,12 +60,10 @@ exports.newExpenseValidation = functions.https.onRequest((req, res) => {
     if (typeof dataObj.description !== 'string') dataObj.description = dataObj.description.toString();
     if (typeof dataObj.haveReceipt !== 'boolean') dataObj.haveReceipt = false;
     if (typeof dataObj.chargeTo !== 'string') dataObj.chargeTo = dataObj.chargeTo.toString();
-    if (!dataObj.lastEditTime || isNaN(dataObj.lastEditTime)) dataObj.lastEditTime = Date.now();
+    dataObj.lastEditTime = Date.now();
     admin.database().ref(`/expenses/${dataObj.userId}`)
-    .push(dataObj)
-      .then(() => {
-        res.status(200).send('expense created')
-      });
+      .push(dataObj)
+    res.status(200).send('expense created')
   });
 });
 
@@ -83,9 +76,7 @@ exports.updatedExpenseValidation = functions.https.onRequest((req, res) => {
     if (typeof dataObj.chargeTo !== 'string') dataObj.chargeTo = dataObj.chargeTo.toString();
     dataObj.lastEditTime = Date.now();
     admin.database().ref(`/expenses/${dataObj.userId}/${expenseId}`).update(dataObj)
-      .then(() => {
-        res.status(200).send('expense updated')
-      });
+    res.status(200).send('expense updated')
   });
 });
 
