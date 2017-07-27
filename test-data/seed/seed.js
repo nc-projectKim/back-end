@@ -1,8 +1,11 @@
+// functions to create test data and save to JSON
+
 const faker = require('faker');
 const fs = require('fs');
 
 // creates random test database
 
+// create user objects
 function createUserData() {
     let data = {};
     for (let k = 0; k < 50; k++) {
@@ -18,10 +21,11 @@ function createUserData() {
     });
 }
 
+// create note objects
 function createNotesData() {
     let data = {};
     const milli = 7776;
-    const top = 1498680060000;
+    const top = 1501100000000;
     for (let k = 0; k < 25; k++) {
         const created = fakeRandomDate();
         const text = faker.lorem.paragraph();
@@ -41,6 +45,7 @@ function createNotesData() {
     });
 }
 
+// create expenses objects
 function createExpensesData() {
     let data = {};
     const milli = 7776;
@@ -64,6 +69,7 @@ function createExpensesData() {
     });
 }
 
+// create billing objects (not delivered)
 function createBillingData() {
     let data = {};
     const milli = 7776;
@@ -93,6 +99,7 @@ function createBillingData() {
     });
 }
 
+// helper functions
 function fakeRandomDate() {
     const rand1 = randBetween(0,5);
     const rand2 = randBetween(1,28);
@@ -106,4 +113,8 @@ function randBetween(a, b) {
     return Math.floor(Math.random() * (b - a) + a);
 }
 
-createBillingData();
+// call
+createExpensesData();
+createUserData();
+createNotesData();
+// createBillingData();

@@ -1,3 +1,5 @@
+// code ported to front end
+
 const firebase = require('firebase');
 const database = require('../config');
 

@@ -1,5 +1,6 @@
 const firebase = require('firebase');
 const database = require('../config');
+// billing functionality was not delivered
 
 const billing = {
     created: Date.now(),
