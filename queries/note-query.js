@@ -1,4 +1,4 @@
-//Function to query a user's notes using keywords or dates edited, or a combination of the two;
+//Function to query a user's notes using keywords or edit dates, or a combination of the two;
 //This functionality has been moved to the front-end repository
 
 const firebase = require('firebase');

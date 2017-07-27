@@ -1,10 +1,11 @@
+//Function to query a user's expenses using keywords, edit dates, client names and receipt flags or a combination of any of the above;
+//This functionality has been moved to the front-end repository
+
 const firebase = require('firebase');
 const database = require('../config');
 
-// variables required for testing the query
-const email = 'John.Smith@google1.com';
-const password = 'password123';
 
+// sample query
 const query = {
     dateItems: {
         dateChosen: 'expenseDate',
@@ -18,10 +19,13 @@ const query = {
     }
 };
 
-firebase.auth().signInWithEmailAndPassword(email, password)
-    .then((data) => {
-        return database.ref(`/expenses/${data.uid}/`)
-    })
+// Main on-submit function
+// The function takes the output of a user query as the variable "query" and uses its elements to filter through user's expenses
+
+function queryExpenses(query) {
+    const userId = firebase.auth().currentUser.uid;
+    return database.ref(`/expenses/${userId}/`)
+})
     .then((expenseRef) => {
        return expenseRef.once('value');
     })
@@ -54,3 +58,4 @@ firebase.auth().signInWithEmailAndPassword(email, password)
         console.log(obj);
     });
 
+module.exports = queryExpenses;

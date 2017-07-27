@@ -1,3 +1,6 @@
+//function to log on with Facebook
+//this functionality has been moved to the front-end repository
+
 const firebase = require('firebase');
 const database = require('../config');
 
