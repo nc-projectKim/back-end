@@ -1,3 +1,5 @@
+// code deprecated - authentication via Facebook preferred
+
 const firebase = require('firebase');
 const database = require('../config');
 

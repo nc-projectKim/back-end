@@ -1,3 +1,5 @@
+// billing functionality not delivered
+
 const firebase = require('firebase');
 const database = require('../config');
 
@@ -17,8 +19,6 @@ firebase.auth().signInWithEmailAndPassword('John.Smith@google1.com', 'password12
     })
     .then(function (data) {
         console.log(data);
-        // billingsRef.on('child_added', (snap) => console.log(snap.val())) 
-        // return billingsRef.push(note);
     })
     .catch(function (err) {
         console.log(err);
