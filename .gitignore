@@ -9,3 +9,4 @@ node_modules
 */**/.idea/*
 .idea/*
 config.js
+test-user-config.js
