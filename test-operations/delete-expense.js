@@ -1,20 +1,16 @@
+//test function to delete an expense
+//this functionality has been moved to the front-end repository
+
 const firebase = require('firebase');
 const database = require('../config');
 
-const email = 'John.Smith@google1.com';
-const password = 'password123';
-const expenseId = '-KpLPSBEENI6mp5C6cRe'
-
-function deleteExpense (expenseId) {
-    firebase.auth().signInWithEmailAndPassword(email, password)
-    .then((data) => {
-        return data.uid;
-    })
-    .then(function (id) {
-        const expenseRef = database.ref(`/expenses/${id}/${expenseId}`)
-        return expenseRef.remove();
-    });
+export default deleteExpense = (expenseId) => {
+    const userId = firebase.auth().currentUser.uid;
+    const expenseRef = database.ref(`/expenses/${userId}/${noteId}`)
+    return expenseRef.remove()
+        .catch(err => {
+            console.log(err);
+        });
 }
 
-deleteExpense(expenseId);
 

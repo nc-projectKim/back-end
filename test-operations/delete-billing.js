@@ -4,13 +4,10 @@
 const firebase = require('firebase');
 const database = require('../config');
 
-// this function logs on as a test user and deletes note -KpLWSpXHxJX9SPanj41
-
-firebase.auth().signInWithEmailAndPassword('John.Smith@google1.com', 'password123')
-    .then((data) => {
-        return data.uid;
-    })
-    .then(function (id) {
-        const billingRef = database.ref(`/billings/${id}/-KpLWSpXHxJX9SPanj41`)
-        return billingRef.remove();
-    });
+export default deleteBilling = (billingId) => {
+    const userId = firebase.auth().currentUser.uid;
+    const billingRef = database.ref(`/billings/${userId}/${noteId}`)
+    return billingRef.remove()
+        .catch(err => {
+            console.log(err);
+        });
