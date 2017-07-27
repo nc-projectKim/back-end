@@ -80,4 +80,8 @@ module.exports = database;
 ```
 
 To get these credentials, sign up for Firebase and click on ```Add Project```.
+<<<<<<< HEAD
 
+=======
+# Project-Overview
+>>>>>>> b32f7a41f0d380f8ceeaeaea07e09f2802b4ff92
